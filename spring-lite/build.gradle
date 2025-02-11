@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.sandcastle.apps'
+version = '1.0.0'
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(19)
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {    
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "org.sandcastle.apps.Application"
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

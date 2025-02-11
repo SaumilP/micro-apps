@@ -1,0 +1,9 @@
+target/
+bin/
+build/
+libs/
+*.jar
+!gradle/gradle-wrapper.jar
+*.class
+.gradle/
+.vscode/
