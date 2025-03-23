@@ -1,0 +1,14 @@
+org/sandcastle/apps/web/MainVerticle.class
+org/sandcastle/apps/entity/Task.class
+org/sandcastle/apps/service/ProjectService.class
+org/sandcastle/apps/repository/ProjectRepository.class
+org/sandcastle/apps/repository/ProjectRepositoryImpl.class
+org/sandcastle/apps/web/ProjectVerticle.class
+org/sandcastle/apps/Application.class
+org/sandcastle/apps/dto/ProjectDto.class
+org/sandcastle/apps/entity/Project.class
+org/sandcastle/apps/service/ProjectServiceImpl.class
+org/sandcastle/apps/mappers/ProjectEntityMapper.class
+org/sandcastle/apps/web/HelloVerticle.class
+org/sandcastle/apps/mappers/ProjectDtoMapper.class
+org/sandcastle/apps/dto/ProjectsList.class
