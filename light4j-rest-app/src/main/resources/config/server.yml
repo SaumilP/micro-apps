@@ -1,0 +1,22 @@
+# Light4J Server Configuration
+# Optimized for minimal footprint and high performance
+
+# Server configuration
+ip: 0.0.0.0
+httpPort: 8080
+enableHttp: true
+enableHttps: false
+enableHttp2: false
+
+# Performance tuning
+bufferSize: 16384
+ioThreads: 4
+workerThreads: 16
+
+# Connection settings
+maxRequestTime: 30000
+alwaysSetDate: true
+serverString: Light4J
+
+# Graceful shutdown
+shutdownGracefulPeriod: 5000
