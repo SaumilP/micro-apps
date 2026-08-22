@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.sandcastle.apps</groupId>
+    <artifactId>light4j-rest-app</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <light-4j.version>2.1.36</light-4j.version>
+        <hikari.version>5.1.0</hikari.version>
+        <postgres.version>42.7.3</postgres.version>
+        <jackson.version>2.17.1</jackson.version>
+        <logback.version>1.5.6</logback.version>
+    </properties>
+
+    <dependencies>
+        <!-- Light4J Core - Minimal HTTP server -->
+        <dependency>
+            <groupId>com.networknt</groupId>
+            <artifactId>server</artifactId>
+            <version>${light-4j.version}</version>
+        </dependency>
+
+        <!-- Light4J Service module -->
+        <dependency>
+            <groupId>com.networknt</groupId>
+            <artifactId>service</artifactId>
+            <version>${light-4j.version}</version>
+        </dependency>
+
+        <!-- PostgreSQL Driver -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgres.version}</version>
+        </dependency>
+
+        <!-- HikariCP - High-performance connection pool -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikari.version}</version>
+        </dependency>
+
+        <!-- Jackson for JSON (already included in Light4J but explicit for clarity) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- Logback for logging -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <plugins>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <release>${java.version}</release>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Shade Plugin - Create fat JAR with minimal size -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.sandcastle.apps.Application</mainClass>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                            <filters>
+                                <filter>
+                                    <!-- Exclude signatures to reduce size -->
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <minimizeJar>false</minimizeJar>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

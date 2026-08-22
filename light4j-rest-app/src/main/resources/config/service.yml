@@ -1,0 +1,9 @@
+# Light4J Service Configuration
+# Minimal configuration for lightweight service
+
+# Service metadata
+description: Light4J REST API for micro-apps
+version: 1.0.0
+
+# Singleton services (none needed for minimal setup)
+singletons: []
