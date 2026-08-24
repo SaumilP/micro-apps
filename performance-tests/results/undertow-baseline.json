@@ -1,0 +1,16 @@
+{
+  "app_name": "undertow-baseline",
+  "port": 8088,
+  "timestamp": "20260824_212522",
+  "test_duration": 300,
+  "test_type": "concurrent_multi_endpoint",
+  "health_endpoint": "/health",
+  "db_endpoint": "/api/projects",
+  "scenarios": {
+    "health_low_concurrency": {"throughput":"478.78","avg_latency":"22.92ms","max_latency":"408.42ms","p50":"19.71ms","p75":"26.68ms","p90":"36.59ms","p99":"99.69ms","total_requests":"143678"},
+    "health_medium_concurrency": {"throughput":"4791.70","avg_latency":"22.73ms","max_latency":"410.59ms","p50":"19.67ms","p75":"26.47ms","p90":"36.08ms","p99":"95.71ms","total_requests":"1437648"},
+    "health_high_concurrency": {"throughput":"23188.36","avg_latency":"23.33ms","max_latency":"410.52ms","p50":"20.06ms","p75":"27.00ms","p90":"37.01ms","p99":"98.99ms","total_requests":"6958088"},
+    "db_low_concurrency": {"throughput":"441.01","avg_latency":"24.65ms","max_latency":"305.38ms","p50":"21.14ms","p75":"28.24ms","p90":"38.88ms","p99":"102.15ms","total_requests":"132335"},
+    "db_medium_concurrency": {"throughput":"2060.16","avg_latency":"25.33ms","max_latency":"405.40ms","p50":"21.52ms","p75":"28.95ms","p90":"40.26ms","p99":"105.83ms","total_requests":"618202"}
+  }
+}

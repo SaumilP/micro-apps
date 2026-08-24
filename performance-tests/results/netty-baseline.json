@@ -1,0 +1,16 @@
+{
+  "app_name": "netty-baseline",
+  "port": 8086,
+  "timestamp": "20260824_211351",
+  "test_duration": 300,
+  "test_type": "concurrent_multi_endpoint",
+  "health_endpoint": "/health",
+  "db_endpoint": "/api/projects",
+  "scenarios": {
+    "health_low_concurrency": {"throughput":"452.28","avg_latency":"23.29ms","max_latency":"634.22ms","p50":"21.17ms","p75":"26.81ms","p90":"33.40ms","p99":"81.82ms","total_requests":"135712"},
+    "health_medium_concurrency": {"throughput":"4521.03","avg_latency":"23.25ms","max_latency":"627.24ms","p50":"21.17ms","p75":"26.76ms","p90":"33.35ms","p99":"80.99ms","total_requests":"1356755"},
+    "health_high_concurrency": {"throughput":"22410.55","avg_latency":"23.41ms","max_latency":"650.17ms","p50":"21.16ms","p75":"26.76ms","p90":"33.35ms","p99":"83.27ms","total_requests":"6724580"},
+    "db_low_concurrency": {"throughput":"439.65","avg_latency":"24.15ms","max_latency":"617.92ms","p50":"21.73ms","p75":"27.44ms","p90":"34.19ms","p99":"89.69ms","total_requests":"131922"},
+    "db_medium_concurrency": {"throughput":"2113.28","avg_latency":"24.04ms","max_latency":"611.50ms","p50":"21.65ms","p75":"27.34ms","p90":"34.04ms","p99":"89.16ms","total_requests":"634068"}
+  }
+}

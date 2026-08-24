@@ -418,32 +418,42 @@ All applications were tested using `wrk` HTTP benchmarking tool on the same mach
 
 **Health Endpoint (Low Concurrency - 10 connections)**
 ```
-Throughput:    21,989.98 req/s
-Latency (Avg): 399.72 μs
-Latency (Max): 21.99 ms
-Total Requests: 661,898
+Throughput:    25,200.53 req/s
+Latency (Avg): 443.43 μs
+Latency (p50):  326.00 μs
+Latency (p90):  754.00 μs
+Latency (p99):  2.38 ms
+Latency (Max): 16.67 ms
+Total Requests: 758,520
 ```
 
 **Health Endpoint (Medium Concurrency - 100 connections)**
 ```
-Throughput:    34,175.99 req/s
-Latency (Avg): 3.38 ms
-Latency (Max): 102.20 ms
-Total Requests: 1,026,721
+Throughput:    32,570.46 req/s
+Latency (Avg): 3.63 ms
+Latency (p50):  2.71 ms
+Latency (p90):  7.39 ms
+Latency (p99):  17.34 ms
+Latency (Max): 76.42 ms
+Total Requests: 978,582
 ```
 
-**Database Query Endpoint (10 connections)**
+**Health Endpoint (High Concurrency - 500 connections)**
 ```
-Throughput:    8,554.46 req/s
-Latency (Avg): 0.99 ms
-Latency (Max): 28.35 ms
-Total Requests: 256,816
+Throughput:    38,598.62 req/s
+Latency (Avg): 13.35 ms
+Latency (p50):  12.03 ms
+Latency (p90):  22.72 ms
+Latency (p99):  39.56 ms
+Latency (Max): 194.20 ms
+Total Requests: 1,161,537
 ```
 
 **Key Strengths**:
-- ✅ **Highest simple endpoint throughput**: 34k req/s
-- ✅ **Ultra-low latency**: 400μs average at low concurrency
-- ✅ **Solid database performance**: 8.5k req/s with PostgreSQL
+- ✅ **Exceptional simple endpoint throughput**: 38.6k req/s
+- ✅ **Ultra-low latency**: 443μs average at low concurrency, 326μs p50
+- ✅ **Excellent scalability**: 53% throughput increase from low to high concurrency
+- ✅ **Consistent performance**: p99 latency under 40ms even at 500 connections
 
 ---
 
@@ -483,12 +493,12 @@ Total Requests: 655,879
 ### Head-to-Head Comparison
 
 #### Simple Endpoint Performance
-| Framework | Low Concurrency (10) | High Concurrency (100) | Winner |
-|-----------|---------------------|------------------------|---------|
-| **Light4J** | 22k req/s | **34k req/s** | 🏆 **Light4J** |
-| **Vert.x** | 14.9k req/s | 20.7k req/s | |
+| Framework | Low Concurrency (10) | Medium Concurrency (100) | High Concurrency (500) | Winner |
+|-----------|---------------------|--------------------------|------------------------|---------|
+| **Light4J** | 25.2k req/s | 32.6k req/s | **38.6k req/s** | 🏆 **Light4J** |
+| **Vert.x** | 14.9k req/s | 20.7k req/s | N/A | |
 
-**Analysis**: Light4J's synchronous model excels at simple, non-blocking endpoints with **55% higher throughput**.
+**Analysis**: Light4J demonstrates excellent scalability with **53% throughput increase** from low to high concurrency. At medium concurrency, Light4J achieves **57% higher throughput** than Vert.x.
 
 #### Database Performance
 | Framework | Throughput | Avg Latency | Concurrency Model | Winner |
@@ -499,13 +509,13 @@ Total Requests: 655,879
 **Analysis**: Vert.x's reactive model provides **156% better database throughput** and **62% lower latency**. This is the power of non-blocking I/O!
 
 #### Latency Comparison
-| Concurrency | Light4J (Avg) | Vert.x (Avg) | Winner |
-|-------------|---------------|--------------|---------|
-| **10 connections** | 400 μs | 605 μs | Light4J |
-| **100 connections** | 3.38 ms | 4.64 ms | Light4J |
-| **DB Queries** | 990 μs | **380 μs** | 🏆 **Vert.x** |
+| Concurrency | Light4J (Avg) | Light4J (p99) | Vert.x (Avg) | Winner |
+|-------------|---------------|---------------|--------------|---------|
+| **10 connections** | 443 μs | 2.38 ms | 605 μs | Vert.x (avg) |
+| **100 connections** | 3.63 ms | 17.34 ms | 4.64 ms | Light4J |
+| **500 connections** | 13.35 ms | 39.56 ms | N/A | - |
 
-**Analysis**: Light4J has slight edge on simple endpoints, but Vert.x dominates database queries.
+**Analysis**: Light4J shows excellent latency characteristics with p99 staying under 40ms even at 500 connections. At medium concurrency, Light4J outperforms Vert.x with 22% lower average latency.
 
 ### Scalability Analysis
 

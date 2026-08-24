@@ -1,0 +1,141 @@
+{
+  "timestamp": "2026-08-24T21:31:00+02:00",
+  "applications": [
+    {
+      "app_name": "armeria-rest",
+      "port": 8085,
+      "timestamp": "20260824_210620",
+      "test_duration": 300,
+      "test_type": "concurrent_multi_endpoint",
+      "health_endpoint": "/health",
+      "db_endpoint": "/projects",
+      "scenarios": {
+        "health_low_concurrency": {"throughput":"305.88","avg_latency":"37.07ms","max_latency":"391.73ms","p50":"30.08ms","p75":"42.53ms","p90":"68.66ms","p99":"160.78ms","total_requests":"91789"},
+        "health_medium_concurrency": {"throughput":"3072.11","avg_latency":"36.91ms","max_latency":"434.99ms","p50":"29.84ms","p75":"42.40ms","p90":"68.69ms","p99":"160.44ms","total_requests":"921711"},
+        "health_high_concurrency": {"throughput":"15228.02","avg_latency":"37.02ms","max_latency":"742.90ms","p50":"29.81ms","p75":"42.38ms","p90":"68.74ms","p99":"161.96ms","total_requests":"4569617"},
+        "db_low_concurrency": {},
+        "db_medium_concurrency": {}
+      }
+    }
+    ,
+    {
+      "app_name": "helidon-rest",
+      "port": 8084,
+      "timestamp": "20260824_205107",
+      "test_duration": 300,
+      "test_type": "concurrent_multi_endpoint",
+      "health_endpoint": "/health",
+      "db_endpoint": "/projects",
+      "scenarios": {
+        "health_low_concurrency": {"throughput":"520.00","avg_latency":"19.41ms","max_latency":"127.04ms","p50":"18.53ms","p75":"22.83ms","p90":"27.69ms","p99":"41.54ms","total_requests":"156046"},
+        "health_medium_concurrency": {"throughput":"5184.68","avg_latency":"19.47ms","max_latency":"229.31ms","p50":"18.57ms","p75":"22.87ms","p90":"27.68ms","p99":"41.63ms","total_requests":"1555916"},
+        "health_high_concurrency": {"throughput":"25708.66","avg_latency":"19.49ms","max_latency":"223.36ms","p50":"18.56ms","p75":"22.87ms","p90":"27.67ms","p99":"41.75ms","total_requests":"7714093"},
+        "db_low_concurrency": {},
+        "db_medium_concurrency": {}
+      }
+    }
+    ,
+    {
+      "app_name": "javalin-rest",
+      "port": 8084,
+      "timestamp": "20260824_205847",
+      "test_duration": 300,
+      "test_type": "concurrent_multi_endpoint",
+      "health_endpoint": "/health",
+      "db_endpoint": "/projects",
+      "scenarios": {
+        "health_low_concurrency": {"throughput":"382.70","avg_latency":"29.25ms","max_latency":"757.73ms","p50":"24.60ms","p75":"36.82ms","p90":"51.92ms","p99":"133.75ms","total_requests":"114837"},
+        "health_medium_concurrency": {"throughput":"4162.69","avg_latency":"27.73ms","max_latency":"1.95s","p50":"22.56ms","p75":"34.61ms","p90":"49.76ms","p99":"133.41ms","total_requests":"1249131"},
+        "health_high_concurrency": {"throughput":"20524.85","avg_latency":"29.57ms","max_latency":"2.00s","p50":"22.65ms","p75":"34.88ms","p90":"50.25ms","p99":"150.89ms","total_requests":"6159294"},
+        "db_low_concurrency": {},
+        "db_medium_concurrency": {}
+      }
+    }
+    ,
+    {
+      "app_name": "light4j-rest-app",
+      "port": 8080,
+      "timestamp": "20260824_202303",
+      "test_duration": 300,
+      "test_type": "concurrent_multi_endpoint",
+      "health_endpoint": "/health",
+      "db_endpoint": "/api/users",
+      "scenarios": {
+        "health_low_concurrency": {"throughput":"526.30","avg_latency":"19.79ms","max_latency":"446.39ms","p50":"18.24ms","p75":"23.73ms","p90":"30.04ms","p99":"62.24ms","total_requests":"157921"},
+        "health_medium_concurrency": {"throughput":"5176.43","avg_latency":"20.14ms","max_latency":"469.23ms","p50":"18.47ms","p75":"23.97ms","p90":"30.28ms","p99":"63.27ms","total_requests":"1553258"},
+        "health_high_concurrency": {"throughput":"25818.34","avg_latency":"20.01ms","max_latency":"474.53ms","p50":"18.36ms","p75":"23.84ms","p90":"30.10ms","p99":"62.28ms","total_requests":"7748079"},
+        "db_low_concurrency": {},
+        "db_medium_concurrency": {}
+      }
+    }
+    ,
+    {
+      "app_name": "netty-baseline",
+      "port": 8086,
+      "timestamp": "20260824_211351",
+      "test_duration": 300,
+      "test_type": "concurrent_multi_endpoint",
+      "health_endpoint": "/health",
+      "db_endpoint": "/api/projects",
+      "scenarios": {
+        "health_low_concurrency": {"throughput":"452.28","avg_latency":"23.29ms","max_latency":"634.22ms","p50":"21.17ms","p75":"26.81ms","p90":"33.40ms","p99":"81.82ms","total_requests":"135712"},
+        "health_medium_concurrency": {"throughput":"4521.03","avg_latency":"23.25ms","max_latency":"627.24ms","p50":"21.17ms","p75":"26.76ms","p90":"33.35ms","p99":"80.99ms","total_requests":"1356755"},
+        "health_high_concurrency": {"throughput":"22410.55","avg_latency":"23.41ms","max_latency":"650.17ms","p50":"21.16ms","p75":"26.76ms","p90":"33.35ms","p99":"83.27ms","total_requests":"6724580"},
+        "db_low_concurrency": {"throughput":"439.65","avg_latency":"24.15ms","max_latency":"617.92ms","p50":"21.73ms","p75":"27.44ms","p90":"34.19ms","p99":"89.69ms","total_requests":"131922"},
+        "db_medium_concurrency": {"throughput":"2113.28","avg_latency":"24.04ms","max_latency":"611.50ms","p50":"21.65ms","p75":"27.34ms","p90":"34.04ms","p99":"89.16ms","total_requests":"634068"}
+      }
+    }
+    ,
+    {
+      "app_name": "quarkus-rest",
+      "port": 8083,
+      "timestamp": "20260824_204334",
+      "test_duration": 300,
+      "test_type": "concurrent_multi_endpoint",
+      "health_endpoint": "/health",
+      "db_endpoint": "/projects",
+      "scenarios": {
+        "health_low_concurrency": {"throughput":"429.89","avg_latency":"24.61ms","max_latency":"232.97ms","p50":"21.81ms","p75":"30.03ms","p90":"40.60ms","p99":"86.74ms","total_requests":"128978"},
+        "health_medium_concurrency": {"throughput":"4304.89","avg_latency":"24.58ms","max_latency":"387.11ms","p50":"21.79ms","p75":"29.94ms","p90":"40.46ms","p99":"86.12ms","total_requests":"1291894"},
+        "health_high_concurrency": {"throughput":"21368.65","avg_latency":"24.57ms","max_latency":"534.20ms","p50":"21.74ms","p75":"29.89ms","p90":"40.37ms","p99":"86.45ms","total_requests":"6412718"},
+        "db_low_concurrency": {},
+        "db_medium_concurrency": {}
+      }
+    }
+    ,
+    {
+      "app_name": "undertow-baseline",
+      "port": 8088,
+      "timestamp": "20260824_212522",
+      "test_duration": 300,
+      "test_type": "concurrent_multi_endpoint",
+      "health_endpoint": "/health",
+      "db_endpoint": "/api/projects",
+      "scenarios": {
+        "health_low_concurrency": {"throughput":"478.78","avg_latency":"22.92ms","max_latency":"408.42ms","p50":"19.71ms","p75":"26.68ms","p90":"36.59ms","p99":"99.69ms","total_requests":"143678"},
+        "health_medium_concurrency": {"throughput":"4791.70","avg_latency":"22.73ms","max_latency":"410.59ms","p50":"19.67ms","p75":"26.47ms","p90":"36.08ms","p99":"95.71ms","total_requests":"1437648"},
+        "health_high_concurrency": {"throughput":"23188.36","avg_latency":"23.33ms","max_latency":"410.52ms","p50":"20.06ms","p75":"27.00ms","p90":"37.01ms","p99":"98.99ms","total_requests":"6958088"},
+        "db_low_concurrency": {"throughput":"441.01","avg_latency":"24.65ms","max_latency":"305.38ms","p50":"21.14ms","p75":"28.24ms","p90":"38.88ms","p99":"102.15ms","total_requests":"132335"},
+        "db_medium_concurrency": {"throughput":"2060.16","avg_latency":"25.33ms","max_latency":"405.40ms","p50":"21.52ms","p75":"28.95ms","p90":"40.26ms","p99":"105.83ms","total_requests":"618202"}
+      }
+    }
+    ,
+    {
+      "app_name": "vertx-lite",
+      "port": 8081,
+      "timestamp": "20260824_203151",
+      "test_duration": 300,
+      "test_type": "concurrent_multi_endpoint",
+      "health_endpoint": "/api/v1/health",
+      "db_endpoint": "/api/v1/projects",
+      "scenarios": {
+        "health_low_concurrency": {"throughput":"436.44","avg_latency":"23.16ms","max_latency":"248.32ms","p50":"22.02ms","p75":"23.50ms","p90":"25.82ms","p99":"45.06ms","total_requests":"130952"},
+        "health_medium_concurrency": {"throughput":"4381.53","avg_latency":"23.06ms","max_latency":"245.07ms","p50":"22.00ms","p75":"23.45ms","p90":"25.70ms","p99":"44.60ms","total_requests":"1314868"},
+        "health_high_concurrency": {"throughput":"21717.95","avg_latency":"23.11ms","max_latency":"349.64ms","p50":"22.00ms","p75":"23.44ms","p90":"25.70ms","p99":"44.76ms","total_requests":"6517057"},
+        "db_low_concurrency": {},
+        "db_medium_concurrency": {}
+      }
+    }
+
+  ]
+}
