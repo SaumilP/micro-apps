@@ -76,6 +76,7 @@ public class MainVerticle extends AbstractVerticle {
 
             // 6. Setup API routes
             var router = Router.router(vertx);
+            router.get("/api/v1/health").handler(ctx -> ctx.response().end("{\"status\":\"UP\"}"));
             router.get("/api/v1/hello").handler(this::helloVertx);
             router.get("/api/v1/hello/:name").handler(this::helloName);
 

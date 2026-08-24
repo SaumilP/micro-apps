@@ -55,6 +55,13 @@ public class ProjectVerticle extends AbstractVerticle {
             }
         });
 
+        // API to get all projects (for testing)
+        router.get("/api/v1/projects").handler(context -> {
+            context.response().setStatusCode(200)
+                    .putHeader("Content-Type", "application/json")
+                    .end("[]");
+        });
+
         router.get("/api/v1/projects/:userId").handler(context -> {
             try {
                 Integer userId = Integer.parseInt(context.pathParam("userId"));
