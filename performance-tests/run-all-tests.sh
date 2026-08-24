@@ -147,6 +147,34 @@ stop_app() {
     log "✓ $app_dir stopped"
 }
 
+restart_postgres() {
+    local app_dir=$1
+
+    info "Restarting PostgreSQL for $app_dir..."
+
+    cd "$PROJECT_ROOT/$app_dir"
+
+    # Restart only the postgres service
+    docker compose restart postgres 2>&1 | tee -a "$MASTER_LOG"
+
+    # Wait for postgres to be healthy
+    local max_attempts=30
+    local attempt=0
+
+    while [ $attempt -lt $max_attempts ]; do
+        if docker compose exec -T postgres pg_isready -U postgres > /dev/null 2>&1; then
+            log "✓ PostgreSQL is ready"
+            return 0
+        fi
+        attempt=$((attempt + 1))
+        echo -n "."
+        sleep 2
+    done
+
+    warn "PostgreSQL health check timeout (but continuing anyway)"
+    return 0
+}
+
 test_app() {
     local app_dir=$1
     local port=$2
@@ -246,6 +274,12 @@ main() {
 
         # Start the application
         if start_app "$app_dir" "$port"; then
+            # Restart PostgreSQL if the app uses a database
+            if [ "$has_db" = "true" ]; then
+                restart_postgres "$app_dir"
+                sleep 5
+            fi
+
             # Wait for warmup
             sleep $PRE_TEST_WARMUP
 

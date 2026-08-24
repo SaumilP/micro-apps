@@ -1,0 +1,16 @@
+{
+  "app_name": "light4j-rest-app",
+  "port": 8080,
+  "timestamp": "20260824_202303",
+  "test_duration": 300,
+  "test_type": "concurrent_multi_endpoint",
+  "health_endpoint": "/health",
+  "db_endpoint": "/api/users",
+  "scenarios": {
+    "health_low_concurrency": {"throughput":"526.30","avg_latency":"19.79ms","max_latency":"446.39ms","p50":"18.24ms","p75":"23.73ms","p90":"30.04ms","p99":"62.24ms","total_requests":"157921"},
+    "health_medium_concurrency": {"throughput":"5176.43","avg_latency":"20.14ms","max_latency":"469.23ms","p50":"18.47ms","p75":"23.97ms","p90":"30.28ms","p99":"63.27ms","total_requests":"1553258"},
+    "health_high_concurrency": {"throughput":"25818.34","avg_latency":"20.01ms","max_latency":"474.53ms","p50":"18.36ms","p75":"23.84ms","p90":"30.10ms","p99":"62.28ms","total_requests":"7748079"},
+    "db_low_concurrency": {},
+    "db_medium_concurrency": {}
+  }
+}

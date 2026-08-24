@@ -1,0 +1,16 @@
+{
+  "app_name": "armeria-rest",
+  "port": 8085,
+  "timestamp": "20260824_210620",
+  "test_duration": 300,
+  "test_type": "concurrent_multi_endpoint",
+  "health_endpoint": "/health",
+  "db_endpoint": "/projects",
+  "scenarios": {
+    "health_low_concurrency": {"throughput":"305.88","avg_latency":"37.07ms","max_latency":"391.73ms","p50":"30.08ms","p75":"42.53ms","p90":"68.66ms","p99":"160.78ms","total_requests":"91789"},
+    "health_medium_concurrency": {"throughput":"3072.11","avg_latency":"36.91ms","max_latency":"434.99ms","p50":"29.84ms","p75":"42.40ms","p90":"68.69ms","p99":"160.44ms","total_requests":"921711"},
+    "health_high_concurrency": {"throughput":"15228.02","avg_latency":"37.02ms","max_latency":"742.90ms","p50":"29.81ms","p75":"42.38ms","p90":"68.74ms","p99":"161.96ms","total_requests":"4569617"},
+    "db_low_concurrency": {},
+    "db_medium_concurrency": {}
+  }
+}

@@ -20,17 +20,21 @@ DB_ENDPOINT=${4:-"/api/projects"}
 RESULTS_DIR="$(dirname "$0")/results"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-# Test parameters
+# Test parameters - All tests run concurrently for 5 minutes total
 WARMUP_REQUESTS=100
 WARMUP_DURATION=30
-TEST_DURATION=30
-COOLDOWN_DURATION=60
+TEST_DURATION=300  # 5 minutes total for all concurrent tests
 
 # Ensure results directory exists
 mkdir -p "$RESULTS_DIR"
 
 # Log file
 LOG_FILE="$RESULTS_DIR/${APP_NAME}_${TIMESTAMP}.log"
+
+# Arrays to store background process info
+declare -a TEST_PIDS
+declare -a TEST_FILES
+declare -a TEST_NAMES
 
 # Functions
 log() {
@@ -88,50 +92,90 @@ wait_for_health() {
 }
 
 warmup() {
-    local url=$1
-    info "Warming up: sending $WARMUP_REQUESTS requests"
+    local health_url=$1
+    local db_url=$2
 
+    info "Warming up: sending $WARMUP_REQUESTS requests to each endpoint"
+
+    # Warmup health endpoint
     for i in $(seq 1 $WARMUP_REQUESTS); do
-        curl -sf "$url" > /dev/null 2>&1 || true
+        curl -sf "$health_url" > /dev/null 2>&1 || true
         if [ $((i % 20)) -eq 0 ]; then
             echo -n "."
         fi
     done
-    echo ""
 
+    # Warmup database endpoint if available
+    if curl -sf "$db_url" > /dev/null 2>&1; then
+        for i in $(seq 1 50); do
+            curl -sf "$db_url" > /dev/null 2>&1 || true
+        done
+    fi
+
+    echo ""
     info "Warmup complete. Waiting ${WARMUP_DURATION}s for JIT compilation..."
     sleep $WARMUP_DURATION
 }
 
-run_wrk_test() {
+run_wrk_test_background() {
     local test_name=$1
     local url=$2
     local threads=$3
     local connections=$4
     local duration=$5
 
-    info "Running: $test_name"
+    info "Starting: $test_name (background)"
     info "  URL: $url"
     info "  Threads: $threads, Connections: $connections, Duration: ${duration}s"
 
     local output_file="$RESULTS_DIR/${APP_NAME}_${test_name// /_}_${TIMESTAMP}.txt"
 
-    wrk -t$threads -c$connections -d${duration}s --latency "$url" > "$output_file" 2>&1
+    # Run wrk in background and store PID
+    wrk -t$threads -c$connections -d${duration}s --latency "$url" > "$output_file" 2>&1 &
+    local pid=$!
 
-    # Parse results
-    local throughput=$(grep "Requests/sec:" "$output_file" | awk '{print $2}')
-    local avg_latency=$(grep "Latency" "$output_file" | head -1 | awk '{print $2}')
-    local max_latency=$(grep "Latency" "$output_file" | head -1 | awk '{print $4}')
+    # Store in arrays
+    TEST_PIDS+=($pid)
+    TEST_FILES+=("$output_file")
+    TEST_NAMES+=("$test_name")
+}
 
-    log "  ✓ Throughput: $throughput req/s"
-    log "  ✓ Latency (avg): $avg_latency"
-    log "  ✓ Latency (max): $max_latency"
+wait_for_tests() {
+    info "Waiting for all concurrent tests to complete (${TEST_DURATION}s)..."
 
-    echo "$output_file"
+    # Wait for all background processes
+    for i in "${!TEST_PIDS[@]}"; do
+        wait ${TEST_PIDS[$i]} 2>/dev/null || true
+    done
+
+    info "All tests completed. Parsing results..."
+
+    # Parse and display results
+    for i in "${!TEST_PIDS[@]}"; do
+        local output_file="${TEST_FILES[$i]}"
+        local test_name="${TEST_NAMES[$i]}"
+
+        if [ -f "$output_file" ] && [ -s "$output_file" ]; then
+            local throughput=$(grep "Requests/sec:" "$output_file" | awk '{print $2}')
+            local avg_latency=$(grep "Latency" "$output_file" | head -1 | awk '{print $2}')
+            local max_latency=$(grep "Latency" "$output_file" | head -1 | awk '{print $4}')
+
+            log "  ✓ $test_name - Throughput: $throughput req/s, Latency (avg): $avg_latency, (max): $max_latency"
+        else
+            warn "  ✗ $test_name - No results generated"
+        fi
+    done
+
+    log "✓ All concurrent tests completed"
 }
 
 parse_wrk_output() {
     local file=$1
+
+    if [ ! -f "$file" ] || [ ! -s "$file" ]; then
+        echo "{}"
+        return
+    fi
 
     # Extract key metrics using awk and grep
     local requests_per_sec=$(grep "Requests/sec:" "$file" | awk '{print $2}')
@@ -160,14 +204,15 @@ generate_json_report() {
   "port": $PORT,
   "timestamp": "$TIMESTAMP",
   "test_duration": $TEST_DURATION,
+  "test_type": "concurrent_multi_endpoint",
   "health_endpoint": "$HEALTH_ENDPOINT",
   "db_endpoint": "$DB_ENDPOINT",
   "scenarios": {
     "health_low_concurrency": $(parse_wrk_output "$RESULTS_DIR/${APP_NAME}_Health_Low_Concurrency_${TIMESTAMP}.txt"),
     "health_medium_concurrency": $(parse_wrk_output "$RESULTS_DIR/${APP_NAME}_Health_Medium_Concurrency_${TIMESTAMP}.txt"),
     "health_high_concurrency": $(parse_wrk_output "$RESULTS_DIR/${APP_NAME}_Health_High_Concurrency_${TIMESTAMP}.txt"),
-    "db_low_concurrency": $(parse_wrk_output "$RESULTS_DIR/${APP_NAME}_Database_Low_Concurrency_${TIMESTAMP}.txt" 2>/dev/null || echo "{}"),
-    "db_medium_concurrency": $(parse_wrk_output "$RESULTS_DIR/${APP_NAME}_Database_Medium_Concurrency_${TIMESTAMP}.txt" 2>/dev/null || echo "{}")
+    "db_low_concurrency": $(parse_wrk_output "$RESULTS_DIR/${APP_NAME}_Database_Low_Concurrency_${TIMESTAMP}.txt"),
+    "db_medium_concurrency": $(parse_wrk_output "$RESULTS_DIR/${APP_NAME}_Database_Medium_Concurrency_${TIMESTAMP}.txt")
   }
 }
 EOF
@@ -175,72 +220,11 @@ EOF
     log "JSON report generated: $json_file"
 }
 
-generate_markdown_report() {
-    local md_file="$RESULTS_DIR/${APP_NAME}.md"
-
-    # Read JSON data
-    local health_low=$(parse_wrk_output "$RESULTS_DIR/${APP_NAME}_Health_Low_Concurrency_${TIMESTAMP}.txt")
-    local health_med=$(parse_wrk_output "$RESULTS_DIR/${APP_NAME}_Health_Medium_Concurrency_${TIMESTAMP}.txt")
-    local health_high=$(parse_wrk_output "$RESULTS_DIR/${APP_NAME}_Health_High_Concurrency_${TIMESTAMP}.txt")
-
-    cat > "$md_file" << 'EOF'
-# Performance Test Results: APP_NAME_PLACEHOLDER
-
-**Test Date**: TIMESTAMP_PLACEHOLDER
-**Port**: PORT_PLACEHOLDER
-**Test Duration**: TEST_DURATION_PLACEHOLDERs per scenario
-
-## Test Environment
-- Tool: wrk
-- OS: Linux
-- Test Machine: Local development environment
-
-## Results Summary
-
-### Health Endpoint Tests
-
-#### Low Concurrency (2 threads, 10 connections)
-HEALTH_LOW_PLACEHOLDER
-
-#### Medium Concurrency (4 threads, 100 connections)
-HEALTH_MED_PLACEHOLDER
-
-#### High Concurrency (8 threads, 500 connections)
-HEALTH_HIGH_PLACEHOLDER
-
-### Database Endpoint Tests
-
-#### Low Concurrency (2 threads, 10 connections)
-DB_LOW_PLACEHOLDER
-
-#### Medium Concurrency (4 threads, 50 connections)
-DB_MED_PLACEHOLDER
-
-## Analysis
-
-### Strengths
-- [To be filled after analysis]
-
-### Observations
-- [To be filled after analysis]
-
-### Recommendations
-- [To be filled after analysis]
-EOF
-
-    # Replace placeholders
-    sed -i "s/APP_NAME_PLACEHOLDER/$APP_NAME/g" "$md_file"
-    sed -i "s/TIMESTAMP_PLACEHOLDER/$TIMESTAMP/g" "$md_file"
-    sed -i "s/PORT_PLACEHOLDER/$PORT/g" "$md_file"
-    sed -i "s/TEST_DURATION_PLACEHOLDER/$TEST_DURATION/g" "$md_file"
-
-    log "Markdown report generated: $md_file"
-}
-
 # Main execution
 main() {
     log "=========================================="
     log "Performance Testing: $APP_NAME"
+    log "Test Type: Concurrent Multi-Endpoint (5min total)"
     log "=========================================="
 
     check_prerequisites
@@ -255,47 +239,37 @@ main() {
         exit 1
     fi
 
-    # Warmup
-    warmup "$health_url"
+    # Warmup both endpoints
+    warmup "$health_url" "$db_url"
 
-    # Run test scenarios
-    log "Starting test scenarios..."
+    # Run all test scenarios CONCURRENTLY for maximum efficiency
+    log "Starting concurrent test scenarios (all running in parallel for ${TEST_DURATION}s)..."
 
-    # Health endpoint tests
-    run_wrk_test "Health Low Concurrency" "$health_url" 2 10 $TEST_DURATION
-    sleep 5
+    # Health endpoint tests at different concurrency levels (all concurrent)
+    run_wrk_test_background "Health Low Concurrency" "$health_url" 2 10 $TEST_DURATION
+    run_wrk_test_background "Health Medium Concurrency" "$health_url" 4 100 $TEST_DURATION
+    run_wrk_test_background "Health High Concurrency" "$health_url" 8 500 $TEST_DURATION
 
-    run_wrk_test "Health Medium Concurrency" "$health_url" 4 100 $TEST_DURATION
-    sleep 5
-
-    run_wrk_test "Health High Concurrency" "$health_url" 8 500 $TEST_DURATION
-    sleep 10
-
-    # Database endpoint tests (if applicable)
+    # Database endpoint tests (if available) - concurrent with health tests
     if curl -sf "$db_url" > /dev/null 2>&1; then
-        log "Database endpoint available, running DB tests..."
-
-        # Warmup DB endpoint
-        for i in $(seq 1 50); do
-            curl -sf "$db_url" > /dev/null 2>&1 || true
-        done
-        sleep 10
-
-        run_wrk_test "Database Low Concurrency" "$db_url" 2 10 $TEST_DURATION
-        sleep 5
-
-        run_wrk_test "Database Medium Concurrency" "$db_url" 4 50 $TEST_DURATION
+        log "Database endpoint available, running concurrent DB tests..."
+        run_wrk_test_background "Database Low Concurrency" "$db_url" 2 10 $TEST_DURATION
+        run_wrk_test_background "Database Medium Concurrency" "$db_url" 4 50 $TEST_DURATION
     else
         warn "Database endpoint not available, skipping DB tests"
     fi
 
+    # Wait for all tests to complete
+    wait_for_tests
+
     # Generate reports
     log "Generating reports..."
     generate_json_report
-    generate_markdown_report
 
     log "=========================================="
     log "✓ Testing complete: $APP_NAME"
+    log "  Total test time: ${TEST_DURATION}s (5 minutes)"
+    log "  All endpoints tested concurrently"
     log "=========================================="
 }
 

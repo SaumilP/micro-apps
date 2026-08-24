@@ -1,0 +1,16 @@
+{
+  "app_name": "vertx-lite",
+  "port": 8081,
+  "timestamp": "20260824_203151",
+  "test_duration": 300,
+  "test_type": "concurrent_multi_endpoint",
+  "health_endpoint": "/api/v1/health",
+  "db_endpoint": "/api/v1/projects",
+  "scenarios": {
+    "health_low_concurrency": {"throughput":"436.44","avg_latency":"23.16ms","max_latency":"248.32ms","p50":"22.02ms","p75":"23.50ms","p90":"25.82ms","p99":"45.06ms","total_requests":"130952"},
+    "health_medium_concurrency": {"throughput":"4381.53","avg_latency":"23.06ms","max_latency":"245.07ms","p50":"22.00ms","p75":"23.45ms","p90":"25.70ms","p99":"44.60ms","total_requests":"1314868"},
+    "health_high_concurrency": {"throughput":"21717.95","avg_latency":"23.11ms","max_latency":"349.64ms","p50":"22.00ms","p75":"23.44ms","p90":"25.70ms","p99":"44.76ms","total_requests":"6517057"},
+    "db_low_concurrency": {},
+    "db_medium_concurrency": {}
+  }
+}

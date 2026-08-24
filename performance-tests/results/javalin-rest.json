@@ -1,0 +1,16 @@
+{
+  "app_name": "javalin-rest",
+  "port": 8084,
+  "timestamp": "20260824_205847",
+  "test_duration": 300,
+  "test_type": "concurrent_multi_endpoint",
+  "health_endpoint": "/health",
+  "db_endpoint": "/projects",
+  "scenarios": {
+    "health_low_concurrency": {"throughput":"382.70","avg_latency":"29.25ms","max_latency":"757.73ms","p50":"24.60ms","p75":"36.82ms","p90":"51.92ms","p99":"133.75ms","total_requests":"114837"},
+    "health_medium_concurrency": {"throughput":"4162.69","avg_latency":"27.73ms","max_latency":"1.95s","p50":"22.56ms","p75":"34.61ms","p90":"49.76ms","p99":"133.41ms","total_requests":"1249131"},
+    "health_high_concurrency": {"throughput":"20524.85","avg_latency":"29.57ms","max_latency":"2.00s","p50":"22.65ms","p75":"34.88ms","p90":"50.25ms","p99":"150.89ms","total_requests":"6159294"},
+    "db_low_concurrency": {},
+    "db_medium_concurrency": {}
+  }
+}

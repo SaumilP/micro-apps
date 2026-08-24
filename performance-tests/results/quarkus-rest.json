@@ -1,0 +1,16 @@
+{
+  "app_name": "quarkus-rest",
+  "port": 8083,
+  "timestamp": "20260824_204334",
+  "test_duration": 300,
+  "test_type": "concurrent_multi_endpoint",
+  "health_endpoint": "/health",
+  "db_endpoint": "/projects",
+  "scenarios": {
+    "health_low_concurrency": {"throughput":"429.89","avg_latency":"24.61ms","max_latency":"232.97ms","p50":"21.81ms","p75":"30.03ms","p90":"40.60ms","p99":"86.74ms","total_requests":"128978"},
+    "health_medium_concurrency": {"throughput":"4304.89","avg_latency":"24.58ms","max_latency":"387.11ms","p50":"21.79ms","p75":"29.94ms","p90":"40.46ms","p99":"86.12ms","total_requests":"1291894"},
+    "health_high_concurrency": {"throughput":"21368.65","avg_latency":"24.57ms","max_latency":"534.20ms","p50":"21.74ms","p75":"29.89ms","p90":"40.37ms","p99":"86.45ms","total_requests":"6412718"},
+    "db_low_concurrency": {},
+    "db_medium_concurrency": {}
+  }
+}

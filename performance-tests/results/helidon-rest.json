@@ -1,0 +1,16 @@
+{
+  "app_name": "helidon-rest",
+  "port": 8084,
+  "timestamp": "20260824_205107",
+  "test_duration": 300,
+  "test_type": "concurrent_multi_endpoint",
+  "health_endpoint": "/health",
+  "db_endpoint": "/projects",
+  "scenarios": {
+    "health_low_concurrency": {"throughput":"520.00","avg_latency":"19.41ms","max_latency":"127.04ms","p50":"18.53ms","p75":"22.83ms","p90":"27.69ms","p99":"41.54ms","total_requests":"156046"},
+    "health_medium_concurrency": {"throughput":"5184.68","avg_latency":"19.47ms","max_latency":"229.31ms","p50":"18.57ms","p75":"22.87ms","p90":"27.68ms","p99":"41.63ms","total_requests":"1555916"},
+    "health_high_concurrency": {"throughput":"25708.66","avg_latency":"19.49ms","max_latency":"223.36ms","p50":"18.56ms","p75":"22.87ms","p90":"27.67ms","p99":"41.75ms","total_requests":"7714093"},
+    "db_low_concurrency": {},
+    "db_medium_concurrency": {}
+  }
+}
