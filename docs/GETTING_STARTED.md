@@ -48,8 +48,8 @@ Before you begin, ensure you have the following installed:
 
 ```bash
 # Clone repository
-git clone https://github.com/your-org/micro-apps.git
-cd micro-apps
+git clone https://github.com/your-org/java-framework-showdown.git
+cd java-framework-showdown
 ```
 
 ### 2. Run the Fastest Framework (Undertow)

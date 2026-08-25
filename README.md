@@ -68,8 +68,8 @@ Get running in under 2 minutes:
 
 ```bash
 # Clone repository
-git clone https://github.com/your-org/micro-apps.git
-cd micro-apps
+git clone https://github.com/your-org/java-framework-showdown.git
+cd java-framework-showdown
 
 # Run fastest framework (Undertow)
 cd undertow-baseline
