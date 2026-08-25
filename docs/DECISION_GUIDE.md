@@ -499,7 +499,7 @@ After choosing your framework:
 
 ---
 
-**Need help deciding? Open a [GitHub Discussion](https://github.com/your-org/micro-apps/discussions) with your requirements!**
+**Need help deciding? Open a [GitHub Discussion](https://github.com/your-org/java-framework-showdown/discussions) with your requirements!**
 
 ---
 

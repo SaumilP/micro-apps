@@ -202,7 +202,7 @@ Unlike toy benchmarks, this project provides:
 
 We welcome contributions! Here's how you can help:
 
-- 🐛 **Report Issues**: Found a bug or inaccuracy? [Open an issue](https://github.com/your-org/micro-apps/issues)
+- 🐛 **Report Issues**: Found a bug or inaccuracy? [Open an issue](https://github.com/your-org/java-framework-showdown/issues)
 - 📊 **Add Benchmarks**: Have test results from different hardware? Share them!
 - 🔧 **Improve Code**: Optimize implementations, fix bugs
 - 📖 **Enhance Docs**: Improve guides, add examples
@@ -222,8 +222,8 @@ We welcome contributions! Here's how you can help:
 
 ## 📞 Support & Community
 
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-org/micro-apps/discussions)
-- 🐛 **Issues**: [Report bugs or request features](https://github.com/your-org/micro-apps/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-org/java-framework-showdown/discussions)
+- 🐛 **Issues**: [Report bugs or request features](https://github.com/your-org/java-framework-showdown/issues)
 - 📧 **Contact**: For business inquiries or collaborations
 
 ## 📄 License
@@ -238,6 +238,6 @@ Individual frameworks have their own licenses. Check each framework directory fo
 
 **⭐ Star this repo if it helped you make a better framework decision!**
 
-Built with ❤️ by the community • [Report Issues](https://github.com/your-org/micro-apps/issues) • [Contribute](CONTRIBUTING.md)
+Built with ❤️ by the community • [Report Issues](https://github.com/your-org/java-framework-showdown/issues) • [Contribute](CONTRIBUTING.md)
 
 </div>

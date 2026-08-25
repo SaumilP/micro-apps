@@ -522,8 +522,8 @@ java -jar target/*.jar
 
 ## Need Help?
 
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-org/micro-apps/discussions)
-- 🐛 **Issues**: [Report bugs or request features](https://github.com/your-org/micro-apps/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-org/java-framework-showdown/discussions)
+- 🐛 **Issues**: [Report bugs or request features](https://github.com/your-org/java-framework-showdown/issues)
 - 📧 **Contact**: For business inquiries or collaborations
 
 ---
