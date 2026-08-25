@@ -3,6 +3,7 @@
 Here are the performance benchmark results for all 11 frameworks. All tests were run under identical conditions to ensure fair comparisons.
 
 **Important Notes**:
+
 - JAR sizes marked with `~` are estimates based on typical builds
 - All cloud cost figures are estimates based on AWS Fargate pricing as of August 2026 and will vary based on actual usage patterns
 - Your actual costs will depend on many factors including region, reserved capacity, and specific workload characteristics
@@ -117,6 +118,7 @@ Good performance, specialized use cases
 ### Test Configuration
 
 **Hardware**:
+
 - Platform: x86_64 Linux
 - CPU: Multi-core (consistent across tests)
 - Memory: 16 GB RAM
@@ -124,6 +126,7 @@ Good performance, specialized use cases
 - Network: Localhost (eliminates network latency)
 
 **Test Tool**: wrk HTTP benchmarking tool
+
 - Version: Latest stable
 - Method: GET requests to /health endpoint
 - Duration: 30 seconds per test
@@ -138,6 +141,7 @@ Good performance, specialized use cases
 | **High** | 8 | 500 | 30s |
 
 **Environment**:
+
 - Docker containers with identical resource limits
 - Same base image (eclipse-temurin Alpine JRE)
 - Same JVM flags and heap settings
@@ -146,12 +150,12 @@ Good performance, specialized use cases
 
 ### Why These Tests Are Reliable
 
-✅ **Identical hardware** - All tests run on same machine
-✅ **Controlled environment** - Docker containers with resource limits
-✅ **Consistent methodology** - Same test tool, duration, warm-up
-✅ **Multiple runs** - Results verified across multiple test runs
-✅ **Real-world endpoints** - Testing actual health/status endpoints
-✅ **Reproducible** - Complete test scripts included in repository
+- ✅ **Identical hardware** - All tests run on same machine
+- ✅ **Controlled environment** - Docker containers with resource limits
+- ✅ **Consistent methodology** - Same test tool, duration, warm-up
+- ✅ **Multiple runs** - Results verified across multiple test runs
+- ✅ **Real-world endpoints** - Testing actual health/status endpoints
+- ✅ **Reproducible** - Complete test scripts included in repository
 
 ---
 
@@ -299,6 +303,7 @@ Helidon              | 2.5s       | < 40s     | Instant
 ### DevOps Impact
 
 Fast startup enables:
+
 - ✅ Aggressive auto-scaling policies
 - ✅ Reduced over-provisioning
 - ✅ Lower costs during traffic spikes
