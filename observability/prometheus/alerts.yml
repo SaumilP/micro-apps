@@ -1,0 +1,199 @@
+groups:
+  # Application health alerts
+  - name: application_health
+    interval: 30s
+    rules:
+      - alert: ApplicationDown
+        expr: up{job=~".*-rest|.*-baseline"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "Application {{ $labels.application }} is down"
+          description: "{{ $labels.application }} has been down for more than 1 minute."
+
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          category: errors
+        annotations:
+          summary: "High error rate on {{ $labels.application }}"
+          description: "{{ $labels.application }} has error rate above 5% (current: {{ $value | humanizePercentage }})"
+
+  # Performance alerts - tuned per framework
+  - name: performance
+    interval: 30s
+    rules:
+      # Undertow (fastest - 37k req/s capacity)
+      - alert: UndertowHighLatency
+        expr: histogram_quantile(0.99, rate(http_request_duration_seconds_bucket{application="undertow-baseline"}[5m])) > 0.010
+        for: 5m
+        labels:
+          severity: warning
+          category: performance
+          framework: undertow
+        annotations:
+          summary: "Undertow p99 latency high"
+          description: "Undertow p99 latency is {{ $value }}s (threshold: 10ms)"
+
+      - alert: UndertowNearCapacity
+        expr: rate(http_requests_total{application="undertow-baseline"}[1m]) > 30000
+        for: 2m
+        labels:
+          severity: warning
+          category: capacity
+        annotations:
+          summary: "Undertow approaching capacity"
+          description: "Undertow handling {{ $value }} req/s (capacity: 37k req/s)"
+
+      # Armeria (35k req/s capacity)
+      - alert: ArmeriaHighLatency
+        expr: histogram_quantile(0.99, rate(http_request_duration_seconds_bucket{application="armeria-rest"}[5m])) > 0.010
+        for: 5m
+        labels:
+          severity: warning
+          category: performance
+          framework: armeria
+        annotations:
+          summary: "Armeria p99 latency high"
+          description: "Armeria p99 latency is {{ $value }}s (threshold: 10ms)"
+
+      # Micronaut/Quarkus (cloud-native, 26-28k req/s)
+      - alert: CloudNativeHighLatency
+        expr: histogram_quantile(0.99, rate(http_request_duration_seconds_bucket{cloud_native="true"}[5m])) > 0.015
+        for: 5m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "{{ $labels.application }} p99 latency high"
+          description: "{{ $labels.application }} p99 latency is {{ $value }}s (threshold: 15ms)"
+
+  # Resource utilization alerts
+  - name: resources
+    interval: 30s
+    rules:
+      - alert: HighMemoryUsage
+        expr: (container_memory_usage_bytes / container_spec_memory_limit_bytes) > 0.85
+        for: 5m
+        labels:
+          severity: warning
+          category: resources
+        annotations:
+          summary: "High memory usage on {{ $labels.name }}"
+          description: "Container {{ $labels.name }} is using {{ $value | humanizePercentage }} of memory limit"
+
+      - alert: HighCPUUsage
+        expr: rate(container_cpu_usage_seconds_total[5m]) > 0.8
+        for: 10m
+        labels:
+          severity: warning
+          category: resources
+        annotations:
+          summary: "High CPU usage on {{ $labels.name }}"
+          description: "Container {{ $labels.name }} CPU usage is {{ $value | humanizePercentage }}"
+
+  # Database connection pool alerts
+  - name: database
+    interval: 30s
+    rules:
+      - alert: ConnectionPoolExhaustion
+        expr: hikari_connections_active / hikari_connections_max > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          category: database
+        annotations:
+          summary: "Connection pool nearly exhausted"
+          description: "{{ $labels.application }} using {{ $value | humanizePercentage }} of connection pool"
+
+      - alert: SlowDatabaseQueries
+        expr: histogram_quantile(0.95, rate(database_query_duration_seconds_bucket[5m])) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+          category: database
+        annotations:
+          summary: "Slow database queries detected"
+          description: "95th percentile query time is {{ $value }}s"
+
+  # JVM alerts
+  - name: jvm
+    interval: 30s
+    rules:
+      - alert: HighGCTime
+        expr: rate(jvm_gc_pause_seconds_sum[5m]) / rate(jvm_gc_pause_seconds_count[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          category: jvm
+        annotations:
+          summary: "High GC pause time on {{ $labels.application }}"
+          description: "Average GC pause is {{ $value }}s"
+
+      - alert: FrequentFullGC
+        expr: rate(jvm_gc_pause_seconds_count{action="end of major GC"}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          category: jvm
+        annotations:
+          summary: "Frequent full GC on {{ $labels.application }}"
+          description: "Full GC occurring {{ $value }} times per second"
+
+  # SLO alerts (Service Level Objectives)
+  - name: slo
+    interval: 1m
+    rules:
+      # 99.9% availability SLO
+      - alert: SLOAvailabilityBreach
+        expr: (sum(rate(http_requests_total{status!~"5.."}[30m])) / sum(rate(http_requests_total[30m]))) < 0.999
+        for: 5m
+        labels:
+          severity: critical
+          category: slo
+        annotations:
+          summary: "SLO availability breach"
+          description: "Availability is {{ $value | humanizePercentage }} (SLO: 99.9%)"
+
+      # p99 latency SLO: < 50ms for high-perf frameworks
+      - alert: SLOLatencyBreach
+        expr: histogram_quantile(0.99, rate(http_request_duration_seconds_bucket{performance=~"high|ultra-high"}[5m])) > 0.050
+        for: 10m
+        labels:
+          severity: warning
+          category: slo
+        annotations:
+          summary: "SLO latency breach on {{ $labels.application }}"
+          description: "p99 latency is {{ $value }}s (SLO: < 50ms)"
+
+  # Framework-specific alerts
+  - name: framework_specific
+    interval: 30s
+    rules:
+      # Vert.x event loop blocked
+      - alert: VertxEventLoopBlocked
+        expr: vertx_eventloop_delay_seconds > 1
+        for: 2m
+        labels:
+          severity: critical
+          category: framework
+          framework: vertx
+        annotations:
+          summary: "Vert.x event loop blocked"
+          description: "Event loop delay is {{ $value }}s - blocking operation detected!"
+
+      # Undertow thread pool saturation
+      - alert: UndertowThreadPoolSaturation
+        expr: undertow_worker_threads_active / undertow_worker_threads_max > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          category: framework
+          framework: undertow
+        annotations:
+          summary: "Undertow thread pool saturated"
+          description: "Thread pool usage at {{ $value | humanizePercentage }}"

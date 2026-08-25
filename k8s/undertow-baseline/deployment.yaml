@@ -1,0 +1,160 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: undertow-baseline
+  labels:
+    app: undertow-baseline
+    framework: undertow
+    tier: backend
+    performance: ultra-high
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: undertow-baseline
+  template:
+    metadata:
+      labels:
+        app: undertow-baseline
+        framework: undertow
+        tier: backend
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8088"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: undertow-baseline
+        image: undertow-baseline-app:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8088
+          protocol: TCP
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+
+        # Resource limits based on actual performance test results
+        # Undertow: 37,808 req/s @ ~180 MB memory usage
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+
+        # Health checks tuned for Undertow's fast startup (~1.8s)
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 2
+
+        # Startup probe for slower initial startup
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 0
+          periodSeconds: 1
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 10
+
+        # Environment variables
+        env:
+        - name: PORT
+          value: "8088"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: undertow-secrets
+              key: database-url
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: undertow-secrets
+              key: database-user
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: undertow-secrets
+              key: database-password
+        - name: JAVA_OPTS
+          value: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:+UseG1GC"
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: undertow-config
+              key: log-level
+
+        # Security context
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+
+        # Volume mounts for tmp and logs
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: logs
+          mountPath: /app/logs
+
+      # Pod-level security and scheduling
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+
+      # Prefer spreading across nodes for HA
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - undertow-baseline
+              topologyKey: kubernetes.io/hostname
+
+      # Volumes
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: logs
+        emptyDir: {}
+
+      # Termination grace period for graceful shutdown
+      terminationGracePeriodSeconds: 30
