@@ -1,0 +1,152 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'micro-apps-dev'
+    environment: 'development'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+# Load rules
+rule_files:
+  - "alerts.yml"
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+
+  # Node Exporter - Host metrics
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          service: 'node-exporter'
+
+  # cAdvisor - Container metrics
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+        labels:
+          service: 'cadvisor'
+
+  # Undertow Baseline
+  - job_name: 'undertow-baseline'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['host.docker.internal:8088']
+        labels:
+          application: 'undertow-baseline'
+          framework: 'undertow'
+          tier: 'backend'
+          performance: 'ultra-high'
+
+  # Armeria REST
+  - job_name: 'armeria-rest'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['host.docker.internal:8085']
+        labels:
+          application: 'armeria-rest'
+          framework: 'armeria'
+          tier: 'backend'
+          performance: 'high'
+
+  # Light4J REST
+  - job_name: 'light4j-rest-app'
+    metrics_path: '/health'
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+        labels:
+          application: 'light4j-rest-app'
+          framework: 'light4j'
+          tier: 'backend'
+          performance: 'high'
+
+  # Micronaut REST
+  - job_name: 'micronaut-rest'
+    metrics_path: '/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:8082']
+        labels:
+          application: 'micronaut-rest'
+          framework: 'micronaut'
+          tier: 'backend'
+          cloud_native: 'true'
+
+  # Quarkus REST
+  - job_name: 'quarkus-rest'
+    metrics_path: '/q/metrics'
+    static_configs:
+      - targets: ['host.docker.internal:8083']
+        labels:
+          application: 'quarkus-rest'
+          framework: 'quarkus'
+          tier: 'backend'
+          cloud_native: 'true'
+
+  # Vert.x Lite
+  - job_name: 'vertx-lite'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['host.docker.internal:8081']
+        labels:
+          application: 'vertx-lite'
+          framework: 'vertx'
+          tier: 'backend'
+          type: 'reactive'
+
+  # Helidon REST
+  - job_name: 'helidon-rest'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['host.docker.internal:8084']
+        labels:
+          application: 'helidon-rest'
+          framework: 'helidon'
+          tier: 'backend'
+
+  # Javalin REST
+  - job_name: 'javalin-rest'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['host.docker.internal:8084']
+        labels:
+          application: 'javalin-rest'
+          framework: 'javalin'
+          tier: 'backend'
+
+  # Netty Baseline
+  - job_name: 'netty-baseline'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['host.docker.internal:8086']
+        labels:
+          application: 'netty-baseline'
+          framework: 'netty'
+          tier: 'backend'
+          type: 'baseline'
+
+  # ActiveJ REST
+  - job_name: 'activej-rest'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['host.docker.internal:8087']
+        labels:
+          application: 'activej-rest'
+          framework: 'activej'
+          tier: 'backend'
+
+# Remote write for long-term storage (optional)
+# remote_write:
+#   - url: "http://cortex:9009/api/prom/push"
+#   - url: "http://thanos-receive:10908/api/v1/receive"

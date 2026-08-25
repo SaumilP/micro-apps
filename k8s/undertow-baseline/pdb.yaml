@@ -1,0 +1,12 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: undertow-baseline-pdb
+  labels:
+    app: undertow-baseline
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: undertow-baseline
+  unhealthyPodEvictionPolicy: AlwaysAllow
