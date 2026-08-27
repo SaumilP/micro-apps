@@ -192,18 +192,18 @@ Not sure where to start? Here are our top picks for common scenarios:
 
 Unlike toy benchmarks, this project provides:
 
-✅ **Real-world conditions**: All tests on identical hardware, same workload
-✅ **Production configs**: K8s manifests, monitoring, scaling configs
-✅ **Complete stack**: Not just code - includes deployment, observability, migration
-✅ **Maintained**: Regular updates with latest framework versions
-✅ **Transparent**: Full methodology documented, reproducible results
+✅ **Real-world conditions**: All tests on identical hardware, same workload <br />
+✅ **Production configs**: K8s manifests, monitoring, scaling configs <br />
+✅ **Complete stack**: Not just code - includes deployment, observability, migration <br />
+✅ **Maintained**: Regular updates with latest framework versions <br />
+✅ **Transparent**: Full methodology documented, reproducible results <br/>
 ✅ **Practical**: Focused on metrics that matter (cost, latency, throughput)
 
 ## 🤝 Contributing
 
 We welcome contributions! Here's how you can help:
 
-- 🐛 **Report Issues**: Found a bug or inaccuracy? [Open an issue](https://github.com/your-org/java-framework-showdown/issues)
+- 🐛 **Report Issues**: Found a bug or inaccuracy? [Open an issue](https://github.com/SaumilP/java-framework-showdown/issues)
 - 📊 **Add Benchmarks**: Have test results from different hardware? Share them!
 - 🔧 **Improve Code**: Optimize implementations, fix bugs
 - 📖 **Enhance Docs**: Improve guides, add examples
@@ -213,9 +213,9 @@ We welcome contributions! Here's how you can help:
 
 ## 📈 Project Stats
 
-- **11 Frameworks** tested
+- **11 Java Frameworks** tested
 - **90+ Test Scenarios** across all frameworks
-- **6 Comprehensive Guides** (40,000+ words)
+- **6 Comprehensive Guides** (40k+ words)
 - **Production K8s Configs** for top frameworks
 - **Complete Observability** stack included
 - **Last Updated**: August 24, 2026
@@ -223,8 +223,8 @@ We welcome contributions! Here's how you can help:
 
 ## 📞 Support & Community
 
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-org/java-framework-showdown/discussions)
-- 🐛 **Issues**: [Report bugs or request features](https://github.com/your-org/java-framework-showdown/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/SaumilP/java-framework-showdown/discussions)
+- 🐛 **Issues**: [Report bugs or request features](https://github.com/SaumilP/java-framework-showdown/issues)
 - 📧 **Contact**: For business inquiries or collaborations
 
 ## 📄 License

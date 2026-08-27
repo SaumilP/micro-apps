@@ -1,4 +1,4 @@
-# Micro-Apps Performance Comparison
+# Java Framework Performance Comparison
 
 Comprehensive comparison of three Java microservice implementations showcasing different frameworks, architectures, and optimization strategies.
 
