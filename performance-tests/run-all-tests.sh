@@ -247,7 +247,7 @@ print_summary() {
 
 # Main execution
 main() {
-    section "Micro-Apps Performance Test Suite"
+    section "Java Frameworks Performance Test Suite"
     log "Starting comprehensive performance testing..."
     log "Master log: $MASTER_LOG"
 

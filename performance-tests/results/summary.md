@@ -1,4 +1,4 @@
-# Micro-Apps Performance Test Results
+# Java Frameworks Performance Test Results
 
 **Test Date**: 2026-08-24 21:31:00
 **Tool**: wrk (HTTP benchmarking tool)

@@ -75,7 +75,7 @@ generate_markdown_summary() {
     log "Generating markdown summary..."
 
     cat > "$SUMMARY_MD" << 'EOF'
-# Micro-Apps Performance Test Results
+# Java Frameworks Performance Test Results
 
 **Test Date**: TIMESTAMP_PLACEHOLDER
 **Tool**: wrk (HTTP benchmarking tool)

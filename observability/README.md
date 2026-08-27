@@ -1,4 +1,4 @@
-# Observability Stack for Micro-Apps
+# Observability Stack for Java Frameworks
 
 Complete monitoring, logging, and tracing solution for all Java microservice frameworks.
 
@@ -49,7 +49,7 @@ URL: http://localhost:9090
 URL: http://localhost:16686
 ```
 
-### 3. Start Micro-Apps
+### 3. Start Applications
 
 ```bash
 # Start applications to monitor
@@ -66,16 +66,16 @@ docker compose up -d
 
 1. Open Grafana: http://localhost:3000
 2. Navigate to Dashboards
-3. Open "Micro-Apps Performance Overview"
+3. Open "Java Framework Performance Overview"
 4. See real-time metrics for all frameworks
 
 ## Architecture
 
 ```
-┌─────────────────┐
-│   Micro-Apps    │ (Undertow, Armeria, Quarkus, etc.)
-│  Applications   │
-└────────┬────────┘
+┌─────────────────────┐
+│   Java Framework    │ (Undertow, Armeria, Quarkus, etc.)
+│  Applications       │
+└────────┬────────────┘
          │ /metrics endpoint
          ▼
 ┌─────────────────┐      ┌──────────────┐
@@ -152,7 +152,7 @@ All frameworks expose standard metrics:
 
 ## Pre-Built Dashboards
 
-### 1. Micro-Apps Performance Overview
+### 1. Java Framework Performance Overview
 
 Compares all frameworks side-by-side:
 - Throughput (requests/sec)

@@ -1,4 +1,4 @@
-# ⚡ Micro-Apps - Java Microservices Performance Benchmark
+# ⚡ Java Microservices Performance Benchmark
 
 <div align="center">
 
