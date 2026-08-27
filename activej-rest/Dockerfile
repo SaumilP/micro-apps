@@ -21,17 +21,16 @@ RUN chown -R appuser:appuser /app
 
 USER appuser
 
-ENV SERVER_PORT=8087 \
-    DB_HOST=postgres \
+ENV DB_HOST=postgres \
     DB_PORT=5432 \
     DB_NAME=projectdb \
     DB_USER=postgres \
     DB_PASSWORD=postgres \
     JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:+UseG1GC -Xlog:gc:stdout:time"
 
-EXPOSE 8087
+EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8087/health || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
 
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

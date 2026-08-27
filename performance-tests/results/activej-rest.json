@@ -1,0 +1,16 @@
+{
+  "app_name": "activej-rest",
+  "port": 8087,
+  "timestamp": "20260827_092308",
+  "test_duration": 300,
+  "test_type": "concurrent_multi_endpoint",
+  "health_endpoint": "/health",
+  "db_endpoint": "/api/projects",
+  "scenarios": {
+    "health_low_concurrency": {"throughput":"516.97","avg_latency":"19.40ms","max_latency":"124.08ms","p50":"18.87ms","p75":"19.78ms","p90":"21.60ms","p99":"33.41ms","total_requests":"155104"},
+    "health_medium_concurrency": {"throughput":"5137.24","avg_latency":"19.52ms","max_latency":"157.05ms","p50":"18.89ms","p75":"19.80ms","p90":"21.74ms","p99":"35.61ms","total_requests":"1541498"},
+    "health_high_concurrency": {"throughput":"25428.78","avg_latency":"19.56ms","max_latency":"153.11ms","p50":"18.89ms","p75":"19.81ms","p90":"21.76ms","p99":"35.71ms","total_requests":"7630193"},
+    "db_low_concurrency": {"throughput":"424.71","avg_latency":"23.70ms","max_latency":"140.37ms","p50":"19.41ms","p75":"24.82ms","p90":"37.04ms","p99":"51.04ms","total_requests":"127437"},
+    "db_medium_concurrency": {"throughput":"2051.99","avg_latency":"23.52ms","max_latency":"159.47ms","p50":"19.38ms","p75":"23.79ms","p90":"36.86ms","p99":"50.86ms","total_requests":"615781"}
+  }
+}

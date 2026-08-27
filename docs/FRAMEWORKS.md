@@ -17,7 +17,7 @@ This guide covers all 11 Java frameworks we've benchmarked. Each framework has d
 | **Helidon** | 23,340 req/s | 950μs | ~11 MB | MicroProfile | ⭐ |
 | **Javalin** | 19,853 req/s | 1.30ms | 9.2 MB | Developer experience | ⭐ |
 | **Netty** | 18,159 req/s | 728μs | 8.5 MB | Educational baseline | ⭐ |
-| **ActiveJ** | Testing | - | 5.3 MB | Minimal footprint | - |
+| **ActiveJ** | 25,429 req/s | 19.56ms | 5.3 MB | Minimal footprint | ⭐⭐ |
 | **Spring Lite** | N/A | N/A | 9.5 KB | Learning DI concepts | Educational |
 
 ---

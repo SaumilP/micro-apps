@@ -32,10 +32,10 @@ Light4J      ██████████████████████�
 Micronaut    ███████████████████████████████          28,130 req/s 💾 Most Efficient
 Vert.x       ███████████████████████████████          28,073 req/s
 Quarkus      ██████████████████████████               26,608 req/s ☁️ Best Cloud-Native
+ActiveJ      ██████████████████████████               25,429 req/s 📦 Smallest JAR
 Helidon      ████████████████████████                 23,340 req/s
 Javalin      ████████████████████                     19,853 req/s 🎨 Best DX
 Netty        ██████████████████                       18,159 req/s
-ActiveJ      Testing                                  5.3 MB JAR (smallest)
 ```
 
 <details>
@@ -49,6 +49,7 @@ ActiveJ      Testing                                  5.3 MB JAR (smallest)
 | **Micronaut** | 28,130 req/s | 675μs | 130 MB | TBD | Cloud-native, cost |
 | **Vert.x** | 28,073 req/s | 603μs | 240 MB | TBD | Reactive systems |
 | **Quarkus** | 26,608 req/s | 736μs | 140 MB | TBD | Kubernetes-native |
+| **ActiveJ** | 25,429 req/s | 19.56ms | ~170 MB | 5.3 MB | Minimal footprint |
 
 **[→ Full Benchmark Results](docs/BENCHMARKS.md)** with charts, latency distributions, and cost analysis.
 
